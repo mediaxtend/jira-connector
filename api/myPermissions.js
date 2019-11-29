@@ -33,12 +33,20 @@ function MyPermissionsClient(jiraClient) {
      * @method getMyPermissions
      * @memberOf MyPermissionsClient#
      * @param opts The request options sent to the Jira API
+     * @param {Array} [permissions] A list of permissions keys (eg. ADMINISTER_PROJECTS, EDIT_ISSUES…). The available permissions can be fetched using {@link PermissionsClient#getAllPermissions}.
      * @param [callback] Called when the permissions have been returned.
      * @return {Promise} Resolved when the permissions have been returned.
+     * @see {@link PermissionsClient#getAllPermissions} for permissions list
      */
-    this.getMyPermissions = function (opts, callback) {
+    this.getMyPermissions = function (opts, permissions, callback) {
+        var queryParams = (permissions
+            ? {
+                permissions: permissions.join(','),
+            }
+            : null
+        );
         var options = {
-            uri: this.jiraClient.buildURL('/mypermissions'),
+            uri: this.jiraClient.buildURL('/mypermissions', null, queryParams),
             method: 'GET',
             json: true,
             followAllRedirects: true,

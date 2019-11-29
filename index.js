@@ -288,16 +288,19 @@ var JiraClient = module.exports = function (config) {
      * @memberOf JiraClient#
      * @param path The path of the URL without concern for the root of the REST API.
      * @param {string | number} [forcedVersion] Use this param to force a particular version
+     * @param {string | Object} [queryParams] Query parameters (add a query string to URL)
      * @returns {string} The constructed URL.
      */
-    this.buildURL = function (path, forcedVersion) {
+    this.buildURL = function (path, forcedVersion, queryParams) {
         var apiBasePath = this.path_prefix + 'rest/api/';
         var version = forcedVersion || this.apiVersion;
+        var query = queryParams || null;
         var requestUrl = url.format({
             protocol: this.protocol,
             hostname: this.host,
             port: this.port,
-            pathname: apiBasePath + version + path
+            pathname: apiBasePath + version + path,
+            query,
         });
 
         return decodeURIComponent(requestUrl);
